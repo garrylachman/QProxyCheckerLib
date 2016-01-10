@@ -11,10 +11,13 @@ QT       -= gui
 TARGET = QProxyCheckerLib
 TEMPLATE = lib
 CONFIG += staticlib
+CONFIG += c++11
 
-SOURCES += qproxycheckerlib.cpp
+SOURCES += qproxycheckerlib.cpp \
+    proxyitem.cpp
 
-HEADERS += qproxycheckerlib.h
+HEADERS += qproxycheckerlib.h \
+    proxyitem.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

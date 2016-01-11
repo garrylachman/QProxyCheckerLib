@@ -3,6 +3,8 @@
 #include <QDebug>
 
 #include "../QProxyCheckerLib/qproxycheckerlib.h"
+#include "../QProxyCheckerLib/proxyitem.h"
+
 
 class QProxyCheckerLibTestTest : public QObject
 {
@@ -20,6 +22,8 @@ QProxyCheckerLibTestTest::QProxyCheckerLibTestTest()
     QProxyCheckerLib* checker = new QProxyCheckerLib();
     QString ret = checker->testLib();
     qDebug() << ret;
+
+    qDebug() << checker->getItem();
 }
 
 void QProxyCheckerLibTestTest::testLib()

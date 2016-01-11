@@ -1,8 +1,9 @@
 #include "proxyitem.h"
 
-ProxyItem::ProxyItem(ProxyType type, QObject *parent) : QObject(parent),
+ProxyItem::ProxyItem(QString a_hostname, int a_port, ProxyType a_type, QObject *parent) :
+    _hostname(a_hostname), _port(a_port), QObject(parent),
     _checkingStatus(CheckingStatus::NotChecked), _proxyStatus(ProxyStatus::None),
-    _proxyType(type), _anonymityLevel(AnonymityLevel::NotSet)
+    _proxyType(a_type), _anonymityLevel(AnonymityLevel::NotSet)
 {
 
 }
@@ -45,4 +46,14 @@ void ProxyItem::setAnonymityLevel(AnonymityLevel anonymityLevel)
 ProxyItem::AnonymityLevel ProxyItem::anonymityLevel() const
 {
     return this->_anonymityLevel;
+}
+
+QString ProxyItem::hostname() const
+{
+    return this->_hostname;
+}
+
+int ProxyItem::port() const
+{
+    return this->_port;
 }

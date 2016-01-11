@@ -18,7 +18,18 @@ SOURCES += qproxycheckerlib.cpp \
 
 HEADERS += qproxycheckerlib.h \
     proxyitem.h
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+
+headersDataFiles.path = $$[QT_INSTALL_HEADERS]/QProxyCheckerLib/
+headersDataFiles.files = $$PWD/*.h
+INSTALLS += headersDataFiles
+
+libraryFiles.path = $$[QT_INSTALL_LIBS]
+Debug:libraryFiles.files = $$OUT_PWD/debug/*.a $$OUT_PWD/debug/*.prl
+Release:libraryFiles.files = $$OUT_PWD/release/*.a $$OUT_PWD/release/*.prl
+INSTALLS += libraryFiles
+
+#
+#unix {
+#    target.path = /usr/lib
+#    INSTALLS += target
+#}

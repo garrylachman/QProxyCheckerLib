@@ -10,6 +10,7 @@ class QProxyCheckerLib
 public:
     QProxyCheckerLib();
     QString testLib();
+    ProxyItem* getItem();
 
 };
 

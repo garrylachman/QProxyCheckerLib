@@ -8,7 +8,7 @@ QProxyCheckerLib::QProxyCheckerLib()
 
 QString QProxyCheckerLib::testLib()
 {
-    ProxyItem * item = new ProxyItem("127.0.0.1", 8081, ProxyItem::ProxyType::Http);
+    ProxyItem * item = new ProxyItem(ProxyItem::ProxyType::Http, "127.0.0.1", 8081);
 
     qDebug() << item->checkingStatus();
 
@@ -21,6 +21,6 @@ QString QProxyCheckerLib::testLib()
 
 ProxyItem* QProxyCheckerLib::getItem()
 {
-     ProxyItem * item = new ProxyItem("127.0.0.1", 8081, ProxyItem::ProxyType::Http);
+     ProxyItem * item = new ProxyItem(ProxyItem::ProxyType::Http, "127.0.0.1", 8081);
      return item;
 }

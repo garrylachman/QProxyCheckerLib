@@ -1,9 +1,11 @@
 #include "proxyitem.h"
 
-ProxyItem::ProxyItem(QString a_hostname, int a_port, ProxyType a_type, QObject *parent) :
+ProxyItem::ProxyItem(ProxyType a_type, QString a_hostname, int a_port, QString a_username,
+                     QString a_password, QObject *parent) :
     _hostname(a_hostname), _port(a_port), QObject(parent),
     _checkingStatus(CheckingStatus::NotChecked), _proxyStatus(ProxyStatus::None),
-    _proxyType(a_type), _anonymityLevel(AnonymityLevel::NotSet)
+    _proxyType(a_type), _anonymityLevel(AnonymityLevel::NotSet),
+    _username(a_username), _password(a_password)
 {
 
 }
@@ -11,6 +13,7 @@ ProxyItem::ProxyItem(QString a_hostname, int a_port, ProxyType a_type, QObject *
 void ProxyItem::setCheckingStatus(CheckingStatus checkingStatus)
 {
     this->_checkingStatus = checkingStatus;
+    emit checkingStatusChanged(this->_checkingStatus);
 }
 
 ProxyItem::CheckingStatus ProxyItem::checkingStatus() const
@@ -57,3 +60,18 @@ int ProxyItem::port() const
 {
     return this->_port;
 }
+
+QString ProxyItem::username() const
+{
+    return this->_username;
+}
+
+QString ProxyItem::password() const
+{
+    return this->_password;
+}
+
+/*void ProxyItem::checkingStatusChanged(CheckingStatus)
+{
+
+}*/

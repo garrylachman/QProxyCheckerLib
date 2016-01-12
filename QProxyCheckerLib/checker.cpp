@@ -1,14 +1,10 @@
 #include "checker.h"
-#include <QDebug>
 
 Checker::Checker(ProxyItem* a_proxyItem, QObject *parent) : QObject(parent), _proxyItem(a_proxyItem)
 {
     this->_nam = new QNetworkAccessManager(this);
     QObject::connect(this->_nam, SIGNAL(finished(QNetworkReply*)),
                      this, SLOT(finished(QNetworkReply*)));
-
-    QObject::connect(this->_nam, SIGNAL(networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility)),
-                     this, SLOT(networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility)));
 
     QObject::connect(this->_nam, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError>)),
                      this, SLOT(sslErrors(QNetworkReply*, const QList<QSslError>)));
@@ -18,21 +14,46 @@ Checker::Checker(ProxyItem* a_proxyItem, QObject *parent) : QObject(parent), _pr
 
 void Checker::start()
 {
+    this->setProxy();
     this->_proxyItem->setCheckingStatus(ProxyItem::CheckingStatus::Checking);
     this->send();
 }
 
 void Checker::send()
 {
-    qDebug() << "Checker::send";
     QNetworkRequest networkRequest = QNetworkRequest(QUrl("http://httpbin.org/get"));
 
     QNetworkReply* networkReply = this->_nam->get(networkRequest);
 }
 
+void Checker::setProxy()
+{
+    switch (this->_proxyItem->proxyType())
+    {
+        case ProxyItem::ProxyType::Http:
+            this->_proxy->setType(QNetworkProxy::ProxyType::HttpProxy);
+        break;
+
+        case ProxyItem::ProxyType::Socks5:
+            this->_proxy->setType(QNetworkProxy::ProxyType::Socks5Proxy);
+        break;
+    }
+
+    this->_proxy->setHostName(this->_proxyItem->hostname());
+    this->_proxy->setPort((quint16)this->_proxyItem->port());
+
+    if ( ! this->_proxyItem->username().isEmpty() &&
+         ! this->_proxyItem->password().isEmpty())
+    {
+        this->_proxy->setUser(this->_proxyItem->username());
+        this->_proxy->setPassword(this->_proxyItem->password());
+    }
+
+    this->_nam->setProxy(*this->_proxy);
+}
+
 void Checker::finished(QNetworkReply *networkReply)
 {
-    qDebug() << "finished";
     if (networkReply->error() != QNetworkReply::NetworkError::NoError)
     {
         this->_proxyItem->setProxyStatus(ProxyItem::ProxyStatus::Offline);
@@ -42,30 +63,37 @@ void Checker::finished(QNetworkReply *networkReply)
 
     QString strReply = (QString)networkReply->readAll();
 
-    qDebug() << "Response:" << strReply;
     QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
     QJsonObject jsonObj = jsonResponse.object();
     QString origin = jsonObj["origin"].toString();
-    qDebug() << origin;
 
-    // Check if we got "," in origin string, if true we got 2 ips
+    // Check if for "," in origin string, if true we got 2 ips
     // the proxy is level 1 (ProxyItem::AnonymityLevel::Transparent)
     bool isOriginMultiIPs = origin.contains(",");
+
+    // Check if for "x-via" header, if true we can detect proxy use but
+    // the sender is anontmous, the proxy is level 2 (ProxyItem::AnonymityLevel::Anonymous)
+    bool isViaHeader = networkReply->hasRawHeader(QString("x-via").toUtf8());
+
     if (isOriginMultiIPs)
     {
         this->_proxyItem->setAnonymityLevel(ProxyItem::AnonymityLevel::Transparent);
     }
-    qDebug() << "isOriginMultiIPs: " << isOriginMultiIPs;
+    else if ( ! isOriginMultiIPs && isViaHeader)
+    {
+        this->_proxyItem->setAnonymityLevel(ProxyItem::AnonymityLevel::Anonymous);
+    }
+    else
+    {
+        // sender IP and x-via is not detected, the proxy is level 3
+        this->_proxyItem->setAnonymityLevel(ProxyItem::AnonymityLevel::Elite);
+    }
 
-}
-
-void Checker::networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible)
-{
-    qDebug() << "networkAccessibleChanged";
+    this->_proxyItem->setProxyStatus(ProxyItem::ProxyStatus::Online);
+    this->_proxyItem->setCheckingStatus(ProxyItem::CheckingStatus::Checked);
 }
 
 void Checker::sslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
 {
-    qDebug() << "sslErrors";
     reply->ignoreSslErrors();
 }

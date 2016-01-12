@@ -70,8 +70,3 @@ QString ProxyItem::password() const
 {
     return this->_password;
 }
-
-/*void ProxyItem::checkingStatusChanged(CheckingStatus)
-{
-
-}*/

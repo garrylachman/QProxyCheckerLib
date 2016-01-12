@@ -1,5 +1,4 @@
 #include "qproxycheckerlib.h"
-#include <QDebug>
 
 QProxyCheckerLib::QProxyCheckerLib(QObject *parent)  : QObject(parent)
 {
@@ -18,6 +17,5 @@ void QProxyCheckerLib::checkProxy(ProxyItem::ProxyType proxyType, QString hostna
 
 void QProxyCheckerLib::checkingStatusChanged(ProxyItem *proxyItem, ProxyItem::CheckingStatus checkingStatus)
 {
-    qDebug() << "checkingStatusChanged " << proxyItem->checkingStatus();
     emit onCheckStarted(proxyItem);
 }

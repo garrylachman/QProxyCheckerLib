@@ -28,7 +28,7 @@ public:
     void setProxyStatus(ProxyStatus proxyStatus);
     ProxyStatus proxyStatus() const;
 
-    enum ProxyType { Socks4, Socks5, Http };
+    enum ProxyType { Socks5, Http };
     Q_ENUM(ProxyType);
     void setProxyType(ProxyType proxyType);
     ProxyType proxyType() const;

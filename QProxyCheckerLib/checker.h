@@ -26,11 +26,11 @@ private:
     QNetworkProxy* _proxy;
 
     void send();
+    void setProxy();
 signals:
 
 public slots:
     void finished(QNetworkReply* networkReply);
-    void networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible);
     void sslErrors(QNetworkReply * reply, const QList<QSslError> & errors);
     //todo:
     //QNetworkAccessManager::proxyAuthenticationRequired slot

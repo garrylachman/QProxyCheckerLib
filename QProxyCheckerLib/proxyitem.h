@@ -58,7 +58,7 @@ private:
     QString _password;
 
 signals:
-    void checkingStatusChanged(CheckingStatus);
+    void checkingStatusChanged(ProxyItem*, ProxyItem::CheckingStatus);
 
 public slots:
 };

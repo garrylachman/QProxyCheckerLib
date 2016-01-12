@@ -14,10 +14,12 @@ CONFIG += staticlib
 CONFIG += c++11
 
 SOURCES += qproxycheckerlib.cpp \
-    proxyitem.cpp
+    proxyitem.cpp \
+    checker.cpp
 
 HEADERS += qproxycheckerlib.h \
-    proxyitem.h
+    proxyitem.h \
+    checker.h
 
 headersDataFiles.path = $$[QT_INSTALL_HEADERS]/QProxyCheckerLib/
 headersDataFiles.files = $$PWD/*.h

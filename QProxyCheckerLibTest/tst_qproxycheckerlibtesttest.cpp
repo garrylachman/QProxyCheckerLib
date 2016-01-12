@@ -1,5 +1,6 @@
 #include <QString>
 #include <QtTest>
+#include <QSignalSpy>
 #include <QDebug>
 
 #include "../QProxyCheckerLib/qproxycheckerlib.h"
@@ -14,23 +15,26 @@ public:
     QProxyCheckerLibTestTest();
 
 private Q_SLOTS:
-    void testLib();
+    void testSignals();
 };
 
 QProxyCheckerLibTestTest::QProxyCheckerLibTestTest()
 {
-    QProxyCheckerLib* checker = new QProxyCheckerLib();
-    QString ret = checker->testLib();
-    qDebug() << ret;
 
-    qDebug() << checker->getItem();
 }
 
-void QProxyCheckerLibTestTest::testLib()
+void QProxyCheckerLibTestTest::testSignals()
 {
-    QVERIFY2(true, "Failure");
+    QProxyCheckerLib* checker = new QProxyCheckerLib();
+
+    QSignalSpy spy(checker, SIGNAL(onCheckStarted(ProxyItem*)));
+
+    checker->checkProxy(ProxyItem::ProxyType::Http, "rev1.proxies.online", 8081);
+
+    QCOMPARE(spy.count(), 1);
+    //QVERIFY(spy.wait(1000));
 }
 
-QTEST_APPLESS_MAIN(QProxyCheckerLibTestTest)
+QTEST_GUILESS_MAIN(QProxyCheckerLibTestTest)
 
 #include "tst_qproxycheckerlibtesttest.moc"

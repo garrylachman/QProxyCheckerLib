@@ -13,7 +13,7 @@ ProxyItem::ProxyItem(ProxyType a_type, QString a_hostname, int a_port, QString a
 void ProxyItem::setCheckingStatus(CheckingStatus checkingStatus)
 {
     this->_checkingStatus = checkingStatus;
-    emit checkingStatusChanged(this->_checkingStatus);
+    emit checkingStatusChanged(this, this->_checkingStatus);
 }
 
 ProxyItem::CheckingStatus ProxyItem::checkingStatus() const

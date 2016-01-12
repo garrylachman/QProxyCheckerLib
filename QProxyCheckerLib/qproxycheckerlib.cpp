@@ -1,26 +1,23 @@
 #include "qproxycheckerlib.h"
 #include <QDebug>
 
-QProxyCheckerLib::QProxyCheckerLib()
+QProxyCheckerLib::QProxyCheckerLib(QObject *parent)  : QObject(parent)
 {
 
 }
 
-QString QProxyCheckerLib::testLib()
+void QProxyCheckerLib::checkProxy(ProxyItem::ProxyType proxyType, QString hostname, int port,
+                                  QString username, QString password)
 {
-    ProxyItem * item = new ProxyItem(ProxyItem::ProxyType::Http, "127.0.0.1", 8081);
-
-    qDebug() << item->checkingStatus();
-
-    item->setCheckingStatus(ProxyItem::Checking);
-    qDebug() << item->checkingStatus();
-    qDebug() << item->hostname();
-
-    return QString("test lib static 1");
+    ProxyItem* proxyItem = new ProxyItem(proxyType, hostname, port, username, password, this);
+    QObject::connect(proxyItem, SIGNAL(checkingStatusChanged(ProxyItem*, ProxyItem::CheckingStatus)),
+                     this, SLOT(checkingStatusChanged(ProxyItem*, ProxyItem::CheckingStatus)));
+    Checker* checker = new Checker(proxyItem, this);
+    checker->start();
 }
 
-ProxyItem* QProxyCheckerLib::getItem()
+void QProxyCheckerLib::checkingStatusChanged(ProxyItem *proxyItem, ProxyItem::CheckingStatus checkingStatus)
 {
-     ProxyItem * item = new ProxyItem(ProxyItem::ProxyType::Http, "127.0.0.1", 8081);
-     return item;
+    qDebug() << "checkingStatusChanged " << proxyItem->checkingStatus();
+    emit onCheckStarted(proxyItem);
 }

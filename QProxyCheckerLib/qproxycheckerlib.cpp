@@ -38,5 +38,5 @@ void QProxyCheckerLib::checkProxy(ProxyItem::ProxyType proxyType, QString hostna
 
 void QProxyCheckerLib::checkingStatusChanged(ProxyItem *proxyItem, ProxyItem::CheckingStatus checkingStatus)
 {
-    emit onCheckStarted(proxyItem);
+    emit statusChanged(proxyItem);
 }

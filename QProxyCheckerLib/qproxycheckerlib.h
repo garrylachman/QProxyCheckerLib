@@ -35,7 +35,7 @@ public:
     void checkProxy(ProxyItem::ProxyType proxyType, QString hostname, int port,
                     QString username = QString(), QString password = QString());
 signals:
-    void onCheckStarted(ProxyItem*);
+    void statusChanged(ProxyItem*);
 public slots:
     void checkingStatusChanged(ProxyItem *proxyItem, ProxyItem::CheckingStatus checkingStatus);
 };

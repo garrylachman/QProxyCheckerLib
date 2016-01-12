@@ -27,7 +27,6 @@
 #include "../QProxyCheckerLib/qproxycheckerlib.h"
 #include "../QProxyCheckerLib/proxyitem.h"
 
-
 class QProxyCheckerLibTestTest : public QObject
 {
     Q_OBJECT
@@ -48,11 +47,11 @@ void QProxyCheckerLibTestTest::testSignals()
 {
     QProxyCheckerLib* checker = new QProxyCheckerLib();
 
-    QSignalSpy spy(checker, SIGNAL(onCheckStarted(ProxyItem*)));
+    QSignalSpy spy(checker, SIGNAL(statusChanged(ProxyItem*)));
 
     checker->checkProxy(ProxyItem::ProxyType::Http, "rev1.proxies.online", 8081);
 
-    QVERIFY(spy.wait(5000));
+    QVERIFY(spy.wait(10000));
 }
 
 QTEST_GUILESS_MAIN(QProxyCheckerLibTestTest)

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += network widgets testlib
+QT       += network widgets testlib core
 
 QT       -= gui
 

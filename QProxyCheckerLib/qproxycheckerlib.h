@@ -15,7 +15,6 @@ public:
                     QString username = QString(), QString password = QString());
 signals:
     void onCheckStarted(ProxyItem*);
-    //void onCheckComplete(ProxyItem*);
 public slots:
     void checkingStatusChanged(ProxyItem *proxyItem, ProxyItem::CheckingStatus checkingStatus);
 };

@@ -5,6 +5,12 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkProxy>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QList>
+#include <QSslError>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include "proxyitem.h"
 
 class Checker : public QObject
@@ -18,9 +24,16 @@ private:
     ProxyItem* _proxyItem;
     QNetworkAccessManager* _nam;
     QNetworkProxy* _proxy;
+
+    void send();
 signals:
 
 public slots:
+    void finished(QNetworkReply* networkReply);
+    void networkAccessibleChanged(QNetworkAccessManager::NetworkAccessibility accessible);
+    void sslErrors(QNetworkReply * reply, const QList<QSslError> & errors);
+    //todo:
+    //QNetworkAccessManager::proxyAuthenticationRequired slot
 };
 
 #endif // CHECKER_H

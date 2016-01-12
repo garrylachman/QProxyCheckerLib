@@ -31,8 +31,8 @@ void QProxyCheckerLibTestTest::testSignals()
 
     checker->checkProxy(ProxyItem::ProxyType::Http, "rev1.proxies.online", 8081);
 
-    QCOMPARE(spy.count(), 1);
-    //QVERIFY(spy.wait(1000));
+    //QCOMPARE(spy.count(), 1);
+    QVERIFY(spy.wait(5000));
 }
 
 QTEST_GUILESS_MAIN(QProxyCheckerLibTestTest)

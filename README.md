@@ -1,7 +1,7 @@
 #Proxy Checker Lib for QT C++
 Copyright (C) 2016 Garry Lachman <garry@lachman.co> under GNU LGPL
 
-http://rev.proxies.online
+https://rev.proxies.online
 
 ##Usage
 

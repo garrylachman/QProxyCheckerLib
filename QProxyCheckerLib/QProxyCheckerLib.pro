@@ -29,6 +29,7 @@ TARGET = QProxyCheckerLib
 TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += c++11
+CONFIG += create_pc create_prl
 
 SOURCES += qproxycheckerlib.cpp \
     proxyitem.cpp \
@@ -44,3 +45,10 @@ INSTALLS += headersDataFiles
 
 target.path = $$[QT_INSTALL_LIBS]
 INSTALLS += target
+
+QMAKE_PKGCONFIG_NAME = QProxyCheckerLib
+QMAKE_PKGCONFIG_DESCRIPTION = Qt5 QProxyCheckerLib
+QMAKE_PKGCONFIG_PREFIX = $$INSTALLBASE
+QMAKE_PKGCONFIG_LIBDIR = $$target.path
+QMAKE_PKGCONFIG_INCDIR = $$headers.path
+QMAKE_PKGCONFIG_VERSION = $$VERSION
